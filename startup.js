@@ -6,4 +6,4 @@ async function read() {
 
 setInterval(() => {
   read().then(res => {console.log(res);});
-}, 10000);
+}, 30000);
