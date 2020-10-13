@@ -1,0 +1,15 @@
+{
+  "name": "plentiwatch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "getData": "nodemon index.js"
+  },
+  "author": "Boris Schauer",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.4",
+    "puppeteer": "^5.3.1"
+  }
+}
