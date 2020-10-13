@@ -17,33 +17,75 @@ async function getData() {
   const waitSec = 3;
   await page.waitForTimeout(waitSec * 1000);
 
-  const battery = await page.$eval('#text-battery',
-    elem => elem.textContent.trim());
-  const batteryStatus = await page.$eval('#indicator-battery-color',
-    elem => elem.classList);
-  const pv = await page.$eval('#text-dc',
-    elem => elem.textContent.trim());
-  const provider = await page.$eval('#text-grid',
-    elem => elem.textContent.trim());
-  const providerStatus = await page.$eval('#indicator-grid-color',
-    elem => elem => elem.classList);
-  const home = await page.$eval('#text-home',
-    elem => elem.textContent.trim());
+  let battery;
+  let batteryStatus;
+  let pv;
+  let provider;
+  let providerStatus;
+  let home;
+
+  try {
+    await page.waitForSelector('#text-battery', {timeout: 3000});
+    battery = await page.$eval('#text-battery',
+      elem => elem.textContent.trim());
+  } catch (error) {
+    console.log('Error: ' + error);
+  }
+
+  try {
+    await page.waitForSelector('#indicator-battery-color', {timeout: 3000});
+    batteryStatus = await page.$eval('#indicator-battery-color',
+      elem => elem.classList);
+  } catch (error) {
+    console.log('Error: ' + error);
+  }
+
+  try {
+    await page.waitForSelector('#text-dc', {timeout: 3000});
+    pv = await page.$eval('#text-dc',
+      elem => elem.textContent.trim());
+  } catch (error) {
+    console.log('Error: ' + error);
+  }
+
+  try {
+    await page.waitForSelector('#text-grid', {timeout: 3000});
+    provider = await page.$eval('#text-grid',
+      elem => elem.textContent.trim());
+  } catch (error) {
+    console.log('Error: ' + error);
+  }
+
+  try {
+    await page.waitForSelector('#indicator-grid-color', {timeout: 3000});
+    providerStatus = await page.$eval('#indicator-grid-color',
+      elem => elem => elem.classList);
+  } catch (error) {
+    console.log('Error: ' + error);
+  }
+
+  try {
+    await page.waitForSelector('#text-home', {timeout: 3000});
+    home = await page.$eval('#text-home',
+      elem => elem.textContent.trim());
+  } catch (error) {
+    console.log('Error: ' + error);
+  }
 
   const values = {
     battery: {
       value: battery,
       status: ((batteryStatus[0] === 'svg-green') ? 'discharge' : 'charge'),
     },
-    pv:{
-      value: pv
+    pv: {
+      value: pv,
     },
     provider: {
       value: provider,
       status: ((providerStatus[0] === 'svg-green') ? 'feed' : 'receive'),
     },
-    home:{
-      value: home
+    home: {
+      value: home,
     },
   };
   await browser.close();
