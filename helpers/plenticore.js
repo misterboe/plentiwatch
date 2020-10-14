@@ -17,27 +17,31 @@ async function getData() {
   const waitSec = 3;
   await page.waitForTimeout(waitSec * 1000);
 
-  let battery;
-  let batteryStatus;
-  let pv;
-  let provider;
-  let providerStatus;
-  let home;
+  let battery = 'not available';
+  let batteryStatus = 'not available';
+  let pv = 'not available';
+  let provider = 'not available';
+  let providerStatus = 'not available';
+  let home = 'not available';
 
-  try {
-    await page.waitForSelector('#text-battery', {timeout: 3000});
-    battery = await page.$eval('#text-battery',
-      elem => elem.textContent.trim());
-  } catch (error) {
-    console.log('Error: ' + error);
+  if (globalConfig.battery) {
+    try {
+      await page.waitForSelector('#text-battery', {timeout: 3000});
+      battery = await page.$eval('#text-battery',
+        elem => elem.textContent.trim());
+    } catch (error) {
+      console.log('Error: ' + error);
+    }
   }
 
-  try {
-    await page.waitForSelector('#indicator-battery-color', {timeout: 3000});
-    batteryStatus = await page.$eval('#indicator-battery-color',
-      elem => elem.classList);
-  } catch (error) {
-    console.log('Error: ' + error);
+  if (globalConfig.battery) {
+    try {
+      await page.waitForSelector('#indicator-battery-color', {timeout: 3000});
+      batteryStatus = await page.$eval('#indicator-battery-color',
+        elem => elem.classList);
+    } catch (error) {
+      console.log('Error: ' + error);
+    }
   }
 
   try {
@@ -64,12 +68,14 @@ async function getData() {
     console.log('Error: ' + error);
   }
 
-  try {
-    await page.waitForSelector('#text-home', {timeout: 3000});
-    home = await page.$eval('#text-home',
-      elem => elem.textContent.trim());
-  } catch (error) {
-    console.log('Error: ' + error);
+  if (globalConfig.smartmeter) {
+    try {
+      await page.waitForSelector('#text-home', {timeout: 3000});
+      home = await page.$eval('#text-home',
+        elem => elem.textContent.trim());
+    } catch (error) {
+      console.log('Error: ' + error);
+    }
   }
 
   const values = {
